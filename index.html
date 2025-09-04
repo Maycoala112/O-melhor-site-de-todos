@@ -1,32 +1,205 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>O melhor site de todos</title>
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz💘</title>
+  <style>
+    :root{
+      --bg:#4b0082; /* Roxo */
+      --card:#5c0d91;--muted:#d1b3ff;--accent:#ff6aa7;--accent-2:#7b5cff;--good:#47d16a;--bad:#ff5c5c;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Arial,sans-serif;background:var(--bg);color:#fff;min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .app{width:100%;max-width:860px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
+    header{padding:28px 22px 18px;display:flex;gap:14px;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .heart{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from 180deg at 50% 50%,var(--accent),var(--accent-2));box-shadow:0 8px 26px rgba(255,106,167,.4)}
+    .title{font-weight:700;letter-spacing:.3px}
+    .muted{color:var(--muted);font-size:.95rem}
+    .content{padding:22px}
+    .screen{display:none;animation:fade .35s ease}
+    .screen.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
+    .welcome{display:grid;gap:18px;text-align:center}
+    .welcome h1{margin:6px 0 0}
+    .welcome p{margin:0 auto;max-width:55ch;color:var(--muted)}
+    .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    input,button{font:inherit}
+    .input{background:#2e0057;border:1px solid rgba(255,255,255,.08);color:#fff;border-radius:14px;padding:12px 14px;outline:none;min-width:180px}
+    .btn{cursor:pointer;border:0;border-radius:14px;padding:12px 18px;font-weight:600}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 10px 30px rgba(123,92,255,.35)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.18);color:#fff}
+
+    .question-box{display:grid;gap:14px}
+    h2{margin:0 0 4px}
+    .answers{display:grid;gap:10px;margin-top:4px}
+
+    .result{display:grid;gap:14px;text-align:center}
+    .answers-list{background:#2e0057;border-radius:14px;padding:16px;text-align:left;max-height:300px;overflow:auto}
+    .answers-list p{margin:6px 0;color:#fff}
+    .answers-list strong{color:var(--muted)}
+
+    footer{padding:12px 18px;color:var(--muted);display:flex;justify-content:center;gap:8px;border-top:1px solid rgba(255,255,255,.08)}
+    footer a{color:#c3b6ff;text-decoration:none}
+  </style>
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campo de Girassóis</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>🌞 Toque no Sol para nascerem girassóis 🌻</h1>
+  <div class="app card" role="application" aria-label="Quiz Romântico">
+    <header>
+      <div class="brand">
+        <div class="heart" aria-hidden="true">💖</div>
+        <div>
+          <div class="title">Quiz para Diva</div>
+          <div class="muted">a mais mais da minha vida</div>
+        </div>
+      </div>
+      <button class="btn ghost" id="btnRestart" title="Recomeçar" style="display:none">↺ Recomeçar</button>
+    </header>
 
-  <div id="sol" onclick="darSol()">☀️</div>
-  <div id="jardim"></div>
+    <div class="content">
+      <!-- Welcome Screen -->
+      <section id="welcome" class="screen welcome active">
+        <h1>Oi, meu amor! 💌</h1>
+        <p>Responda esse quiz com sinceridade💜</p>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" id="btnStart">Começar</button>
+        </div>
+      </section>
 
-  <script src="script.js"></script>
-</body>
-</html>
-<!-- partial -->
-  <script  src="./script.js"></script>
+      <!-- Quiz Screen -->
+      <section id="quiz" class="screen">
+        <div class="question-box">
+          <h2 id="qText">Pergunta</h2>
+          <div class="answers" id="answers"></div>
+          <div class="row" style="justify-content:space-between;margin-top:14px">
+            <button class="btn ghost" id="btnBack">← Voltar</button>
+            <button class="btn primary" id="btnNext">Próxima →</button>
+          </div>
+        </div>
+      </section>
 
+      <!-- Result Screen -->
+      <section id="result" class="screen result">
+        <h2>Um simples quiz para melhor pessoa do meu mundo!</h2>
+        <div class="answers-list" id="answersList"></div>
+        <div class="row" style="justify-content:center;margin-top:8px">
+          <button class="btn ghost" id="btnAgain">Fazer de novo</button>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <span>Feito com muito amor pra você💜 </span>
+    </footer>
+  </div>
+
+  <script>
+    // Perguntas abertas
+    const questions = [
+      'O que você tem mais vontade de fazer?',
+      'O que mais você gosta em mim?',
+      'Qual o seu maior desejo hoje?',
+      'O que te faz se sentir amada?',
+      'Tem algo que você gostaria que eu fizesse com você?',
+      'O que eu faço que mais te irrita?',
+      'Tem algo que você mudaria em mim?',
+      'O que te deixa mais feliz?',
+      'Onde você gostaria de viver depois dos 60 anos?',
+      'Qual sentimento você sente conversando comigo?'
+    ];
+
+    const state = {
+      i: 0,
+      answers: Array(questions.length).fill('')
+    };
+
+    const el = {
+      welcome: document.getElementById('welcome'),
+      quiz: document.getElementById('quiz'),
+      result: document.getElementById('result'),
+      qText: document.getElementById('qText'),
+      answers: document.getElementById('answers'),
+      btnStart: document.getElementById('btnStart'),
+      btnBack: document.getElementById('btnBack'),
+      btnNext: document.getElementById('btnNext'),
+      btnRestart: document.getElementById('btnRestart'),
+      btnAgain: document.getElementById('btnAgain'),
+      answersList: document.getElementById('answersList')
+    };
+
+    function show(screen){
+      [el.welcome, el.quiz, el.result].forEach(s=>s.classList.remove('active'));
+      screen.classList.add('active');
+    }
+
+    function start(){
+      state.i = 0;
+      state.answers = Array(questions.length).fill('');
+      el.btnRestart.style.display = 'inline-block';
+      renderQuestion();
+      show(el.quiz);
+    }
+
+    function renderQuestion(){
+      el.qText.textContent = questions[state.i];
+      el.answers.innerHTML = '';
+
+      const input = document.createElement('textarea');
+      input.className = 'input';
+      input.rows = 4;
+      input.style.width = '100%';
+      input.placeholder = 'Escreva sua resposta aqui...';
+      input.value = state.answers[state.i];
+      input.addEventListener('input', ()=> state.answers[state.i] = input.value);
+      el.answers.appendChild(input);
+
+      el.btnBack.disabled = state.i === 0;
+      el.btnNext.textContent = state.i === questions.length - 1 ? 'Finalizar' : 'Próxima →';
+    }
+
+    function next(){
+      if(state.i < questions.length - 1){
+        state.i++;
+        renderQuestion();
+      } else {
+        finish();
+      }
+    }
+
+    function back(){
+      if(state.i>0){
+        state.i--;
+        renderQuestion();
+      }
+    }
+
+    function finish(){
+      el.answersList.innerHTML = '';
+      questions.forEach((q, i)=>{
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${q}</strong><br>${state.answers[i] || '<em>Sem resposta</em>'}`;
+        el.answersList.appendChild(p);
+      });
+      show(el.result);
+    }
+
+    function restart(){
+      state.i = 0;
+      state.answers = [];
+      el.btnRestart.style.display = 'none';
+      show(el.welcome);
+    }
+
+    // Eventos
+    el.btnStart.addEventListener('click', start);
+    el.btnNext.addEventListener('click', next);
+    el.btnBack.addEventListener('click', back);
+    el.btnAgain.addEventListener('click', start);
+    el.btnRestart.addEventListener('click', restart);
+
+  </script>
 </body>
 </html>

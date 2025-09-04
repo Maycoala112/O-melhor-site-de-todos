@@ -1,78 +1,32 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: linear-gradient(to top, #a3d9ff, #ffffff);
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h1 {
-  margin: 15px;
-  font-size: 1.2rem;
-  color: #444;
-  padding: 0 10px;
-}
-
-#sol {
-  font-size: 90px;
-  cursor: pointer;
-  margin: 15px auto;
-  transition: transform 0.3s ease;
-}
-
-#sol:active {
-  transform: scale(1.2) rotate(15deg);
-}
-
-#jardim {
-  position: relative;
-  width: 100%;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-/* Girassóis */
-.flor {
-  position: absolute;
-  font-size: 40px;
-  opacity: 0;
-  transform: scale(0.3);
-  transition: all 1s ease;
-}
-
-.flor.broto {
-  opacity: 1;
-  transform: scale(0.5);
-  filter: grayscale(70%);
-}
-
-.flor.florida {
-  transform: scale(1);
-  filter: none;
-  opacity: 1;
-}
-
-/* Girassol especial */
-.flor.especial {
-  font-size: 80px;
-  cursor: pointer;
-  z-index: 10;
-}
-
+/* Responsividade */
 @media (max-width: 600px) {
-  #sol {
-    font-size: 70px;
+  body {
+    padding: 12px;
   }
-
-  .flor {
-    font-size: 30px;
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
-
-  .flor.especial {
-    font-size: 60px;
+  .title {
+    font-size: 1.1rem;
+  }
+  .content {
+    padding: 16px;
+  }
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  textarea.input {
+    font-size: 1rem;
+    min-height: 100px;
+  }
+  h2 {
+    font-size: 1.1rem;
   }
 }
